@@ -1,7 +1,7 @@
 This is C++ library for Arduino for controlling various types of motors(Servo
 motor, DC motor, Stepper Motor) on a robot.
 
-#Installation
+# Installation
 --------------------------------------------------------------------------------
 
 To install this library, just place this entire folder as a subfolder in your
@@ -16,7 +16,7 @@ Arduino/lib/targets/libraries/MotorControl/keywords.txt      (the syntax colorin
 Arduino/lib/targets/libraries/MotorControl/examples          (the examples in the "open" menu)
 Arduino/lib/targets/libraries/MotorControl/readme.txt        (this file)
 
-#Building
+# Building
 --------------------------------------------------------------------------------
 
 After this library is installed, you just have to start the Arduino application.
@@ -37,7 +37,7 @@ If you choose to modify the code for this library (i.e. "MotorControl.cpp" or "M
 then you must first 'unbuild' this library by deleting the "MotorControl.o" file. The
 new "MotorControl.o" with your code will appear after the next press of "verify"
 
-#Disclaimer
+# Disclaimer
 --------------------------------------------------------------------------------
 At this time the project is incomplete and on untested therefore contains errors
 or/and bugs.
