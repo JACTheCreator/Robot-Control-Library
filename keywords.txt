@@ -1,0 +1,29 @@
+#######################################
+# Syntax Coloring Map For Test
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+MotorControl KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+drive	KEYWORD2
+init KEYWORD2
+
+#######################################
+# Instances (KEYWORD2)
+#######################################
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+FORWARD LITERAL1
+REVERSE LITERAL1
+LEFT LITERAL1
+RIGHT LITERAL1
+STOP LITERAL1
