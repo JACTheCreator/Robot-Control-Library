@@ -114,8 +114,9 @@ void DC_Motor::right(void)
 }
 
 
-void DC_Motor::forward(int speed) : _speed(speed)
+void DC_Motor::forward(int speed)
 {
+  _speed = speed;
   //Clockwise
   digitalWrite(_leftIn1, HIGH);
   digitalWrite(_leftIn2, LOW);
@@ -128,8 +129,9 @@ void DC_Motor::forward(int speed) : _speed(speed)
   }
 }
 
-void DC_Motor::reverse(int speed) : _speed(speed)
+void DC_Motor::reverse(int speed)
 {
+  _speed = speed;
   //Anti-clockwise
   digitalWrite(_leftIn1, LOW);
   digitalWrite(_leftIn2, HIGH);
@@ -141,8 +143,9 @@ void DC_Motor::reverse(int speed) : _speed(speed)
   analogWrite(_pwmRight,_speed);
 }
 
-void DC_Motor::left(int speed) : _speed(speed)
+void DC_Motor::left(int speed)
 {
+  _speed = speed;
   //Clockwise
   digitalWrite(_leftIn1, LOW);
   digitalWrite(_leftIn2, HIGH);
@@ -151,11 +154,12 @@ void DC_Motor::left(int speed) : _speed(speed)
   //Anti-clockwise
   digitalWrite(_rightIn1, HIGH);
   digitalWrite(_rightIn2, LOW);
-  analogWrite(_pwmRight, _speed)
+  analogWrite(_pwmRight, _speed);
 }
 
-void DC_Motor::right(int speed) : _speed(speed)
+void DC_Motor::right(int speed)
 {
+  _speed = speed;
   //Anti-clockwise
   digitalWrite(_leftIn1, LOW);
   digitalWrite(_leftIn2, HIGH);
@@ -164,7 +168,7 @@ void DC_Motor::right(int speed) : _speed(speed)
   //Clockwise
   digitalWrite(_rightIn1, HIGH);
   digitalWrite(_rightIn2, LOW);
-  analogWrite(_pwmRight, _speed)
+  analogWrite(_pwmRight, _speed);
 }
 
 void DC_Motor::stop()
@@ -179,39 +183,39 @@ void DC_Motor::stop()
   //Clockwise
   digitalWrite(_rightIn1, HIGH);
   digitalWrite(_rightIn2, HIGH);
-  analogWrite(_pwmRight, _speed)
+  analogWrite(_pwmRight, _speed);
 }
 
 /****************************
   ROBOT CONTROL - DC MOTOR
 *****************************/
-DC_Motor::drive(direction)
+void DC_Motor::drive(int direction)
 {
   switch(direction)
   {
     case FORWARD:
-      DC_Motor::forward(void);
+      DC_Motor::forward();
     break;
 
     case REVERSE:
-      DC_Motor::reverse(void);
+      DC_Motor::reverse();
     break;
 
     case LEFT:
-      DC_Motor::left(void);
+      DC_Motor::left();
     break;
 
     case RIGHT:
-      DC_Motor::right(void);
+      DC_Motor::right();
     break;
 
     case STOP:
-      DC_Motor::stop(void);
+      DC_Motor::stop();
     break;
   }
 }
 
-DC_Motor::drive(direction, speed)
+void DC_Motor::drive(int direction, int speed)
 {
   switch(direction)
   {
@@ -232,7 +236,7 @@ DC_Motor::drive(direction, speed)
     break;
 
     case STOP:
-      DC_Motor::stop(speed);
+      DC_Motor::stop();
     break;
   }
 }

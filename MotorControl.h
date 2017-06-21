@@ -54,15 +54,15 @@ class DC_Motor : public MotorControl
     bool _usesPWM = false;
     bool isOneWheel = false;
     bool isTwoWheel = false;
-    void forward(void);
-    void forward(int);
-    void reverse(void);
-    void reverse(int);
-    void left(void);
-    void left(int);
-    void right(void);
-    void right(int);
-    void stop(void);
+    void forward(void) override;
+    void forward(int) override;
+    void reverse(void) override;
+    void reverse(int) override;
+    void left(void) override;
+    void left(int) override;
+    void right(void) override;
+    void right(int) override;
+    void stop(void) override;
 };
 
 #endif //__MOTORCONTROL_H__
