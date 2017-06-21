@@ -34,8 +34,3 @@ code.
 If you choose to modify the code for this library (i.e. "MotorControl.cpp" or "MotorControl.h"),
 then you must first 'unbuild' this library by deleting the "MotorControl.o" file. The
 new "MotorControl.o" with your code will appear after the next press of "verify"
-
-# Disclaimer
-
-At this time the project is incomplete and on untested therefore contains errors
-or/and bugs.
