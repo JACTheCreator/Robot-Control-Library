@@ -1,3 +1,9 @@
+/**
+* @file MotorControl.h
+* @author Jermaine Coates @JACTheCreator
+* @brief This is C++ library for Arduino for controlling various motors of the same type simultaneously(Servo motor, DC motor, Stepper Motor) on a robot.
+*/
+
 #include "MotorControl.h"
 
 /**********************
