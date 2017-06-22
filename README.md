@@ -1,5 +1,4 @@
-This is C++ library for Arduino for controlling various types of motors(Servo
-motor, DC motor, Stepper Motor) on a robot.
+This is C++ library for Arduino for controlling various motors of the same type simultaneously(Servo motor, DC motor, Stepper Motor) on a robot
 
 # Installation
 
