@@ -147,7 +147,7 @@ class DC_Motor : public MotorControl
     void reverse(int speed) override;
 
     /**
-     * @brief      {Moves the robot (motor(s)) left.
+     * @brief      Moves the robot (motor(s)) left.
      */
     void left(void) override;
 

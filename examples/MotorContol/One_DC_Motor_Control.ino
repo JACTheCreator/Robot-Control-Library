@@ -1,3 +1,8 @@
+/**
+* @file One_DC_Motor_Control.ino
+* @author Jermaine Coates
+*/
+
 #include <MotorControl.h>
 
 //Pins the Motor is connected to -> 8 and 9
