@@ -14,12 +14,17 @@
   #include "pins_arduino.h"
   #include "WConstants.h"
 #endif
+#include "AFMotor.h"
 
 #define FORWARD 1
 #define REVERSE 2
 #define LEFT 3
 #define RIGHT 4
 #define STOP 5
+
+#define NONE '1'
+#define ADAFRUIT_V1 '2'
+#define ADAFRUIT_V2 '3'
 
 /**
  * @brief      Defines the direction the Robot (motor(s)) will move in.
@@ -46,6 +51,9 @@ public:
 class DC_Motor : public MotorControl
 {
   public:
+
+    DC_Motor(int noOfWheels, char motorShieldOption);
+
     /**
      * @brief      Initialize the pins for a DC motor.
      *
@@ -111,16 +119,33 @@ class DC_Motor : public MotorControl
     void drive(int direction, int speed);
 
   private:
+    //Using H-Bridge
     int _leftIn1;
     int _leftIn2;
     int _rightIn1;
     int _rightIn2;
     int _pwmLeft;
     int _pwmRight;
+
+    //Using Motor Shield
+    AF_DCMotor frontLeftMotor = AF_DCMotor(0);
+    AF_DCMotor frontRightMotor = AF_DCMotor(0);
+    AF_DCMotor backLeftMotor = AF_DCMotor(0);
+    AF_DCMotor backRightMotor = AF_DCMotor(0);
+
     int _speed;
+    char _motorShieldOption = '1';
+    int _noOfWheels;
     bool _usesPWM = false;
     bool isOneWheel = false;
     bool isTwoWheel = false;
+    bool isFourWheel = false;
+
+    void oneDCMotor();
+
+    void twoDCMotors();
+
+    void fourDCMotors();
 
     /**
      * @brief      Moves the robot (motor(s)) forward.
@@ -175,5 +200,4 @@ class DC_Motor : public MotorControl
      */
     void stop(void) override;
 };
-
 #endif //__MOTORCONTROL_H__
