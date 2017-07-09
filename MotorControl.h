@@ -26,6 +26,10 @@
 #define ADAFRUIT_V1 '2'
 #define ADAFRUIT_V2 '3'
 
+extern const uint8_t FORWARD_ACTION[3];
+extern const uint8_t BACKWARD_ACTION[3];
+extern const uint8_t STOP_ACTION[3];
+
 /**
  * @brief      Defines the direction the Robot (motor(s)) will move in.
  */
@@ -38,10 +42,10 @@ public:
     virtual void reverse(void)=0;
     virtual void left(void)=0;
     virtual void right(void)=0;
-    virtual void forward(int speed)=0;
-    virtual void reverse(int speed)=0;
-    virtual void left(int speed)=0;
-    virtual void right(int speed)=0;
+    virtual void forward(uint8_t speed)=0;
+    virtual void reverse(uint8_t speed)=0;
+    virtual void left(uint8_t speed)=0;
+    virtual void right(uint8_t speed)=0;
     virtual void stop(void)=0;
 };
 
@@ -52,7 +56,8 @@ class DC_Motor : public MotorControl
 {
   public:
 
-    DC_Motor(int noOfWheels, char motorShieldOption);
+
+    DC_Motor(uint8_t noOfWheels, char* motorShieldOption);
 
     /**
      * @brief      Initialize the pins for a DC motor.
@@ -60,7 +65,7 @@ class DC_Motor : public MotorControl
      * @param[in]  in1   The pin on the arduino that controls the positive polarity of the motor.
      * @param[in]  in2   The pin on the arduino that controls the negative polarity of the motor.
      */
-    DC_Motor(int in1, int in2);
+    DC_Motor(uint8_t in1, uint8_t in2);
 
     /**
      * @brief      Initialize the pins for a DC motor with speed control.
@@ -69,7 +74,7 @@ class DC_Motor : public MotorControl
      * @param[in]  in2   The pin on the arduino that controls the negative polarity of the motor.
      * @param[in]  pwm   The Pulse Width Modulation(PWM) pin on the arduino for the motor.
      */
-    DC_Motor(int in1, int in2, int pwm);
+    DC_Motor(uint8_t in1, uint8_t in2, uint8_t pwm);
 
     /**
      * @brief      Initialize the pins for two DC motor.
@@ -79,7 +84,7 @@ class DC_Motor : public MotorControl
      * @param[in]  rightIn1  The pin on the arduino that controls the positive polarity of the (right) motor.
      * @param[in]  rightIn2  The pin on the arduino that controls the negative polarity of the (right) motor.
      */
-    DC_Motor(int leftIn1, int leftIn2, int rightIn1, int rightIn2);
+    DC_Motor(uint8_t leftIn1, uint8_t leftIn2, uint8_t rightIn1, uint8_t rightIn2);
 
     /**
      * @brief      Initialize the pins for two DC motor with speed control
@@ -91,7 +96,11 @@ class DC_Motor : public MotorControl
      * @param[in]  rightIn2  The pin on the arduino that controls the negative polarity of the (right) motor.
      * @param[in]  pwmRight  The Pulse Width Modulation(PWM) pin on the arduino for the (right) motor.
      */
-    DC_Motor(int leftIn1, int leftIn2, int pwmLeft, int rightIn1, int rightIn2, int pwmRight);
+    DC_Motor(uint8_t leftIn1, uint8_t leftIn2, uint8_t pwmLeft, uint8_t rightIn1, uint8_t rightIn2, uint8_t pwmRight);
+
+    DC_Motor(uint8_t frontLeftIn1, uint8_t frontLeftIn2, uint8_t frontRightIn1, uint8_t frontRightIn2, uint8_t backLeftIn1, uint8_t backLeftIn2, uint8_t backRightIn1, uint8_t backRightIn2);
+
+    DC_Motor(uint8_t frontLeftIn1, uint8_t frontLeftIn2, uint8_t pwmFrontLeft, uint8_t frontRightIn1, uint8_t frontRightIn2, uint8_t pwmFrontRight, uint8_t backLeftIn1, uint8_t backLeftIn2, uint8_t pwmBackLeft, uint8_t backRightIn1, uint8_t backRightIn2, uint8_t pwmBackRight);
 
     /**
      * @brief      Destroys the object.
@@ -108,7 +117,7 @@ class DC_Motor : public MotorControl
      *
      * @param[in]  direction  The course along which the robot (motor(s)) moves.
      */
-    void drive(int direction);
+    void drive(uint8_t direction);
 
     /**
      * @brief      Operating and controlling the direction and speed of the motor(s).
@@ -116,16 +125,23 @@ class DC_Motor : public MotorControl
      * @param[in]  direction  The course along which the robot (motor(s)) moves.
      * @param[in]  speed      The rate at which the motor(s) moves.
      */
-    void drive(int direction, int speed);
+    void drive(uint8_t direction, uint8_t speed);
 
   private:
     //Using H-Bridge
-    int _leftIn1;
-    int _leftIn2;
-    int _rightIn1;
-    int _rightIn2;
-    int _pwmLeft;
-    int _pwmRight;
+    uint8_t _frontLeftIn1;
+    uint8_t _frontLeftIn2;
+    uint8_t _frontRightIn1;
+    uint8_t _frontRightIn2;
+    uint8_t _pwmFrontLeft;
+    uint8_t _pwmFrontRight;
+
+    uint8_t _backLeftIn1;
+    uint8_t _backLeftIn2;
+    uint8_t _backRightIn1;
+    uint8_t _backRightIn2;
+    uint8_t _pwmBackLeft;
+    uint8_t _pwmBackRight;
 
     //Using Motor Shield
     AF_DCMotor frontLeftMotor = AF_DCMotor(0);
@@ -133,17 +149,17 @@ class DC_Motor : public MotorControl
     AF_DCMotor backLeftMotor = AF_DCMotor(0);
     AF_DCMotor backRightMotor = AF_DCMotor(0);
 
-    int _speed;
-    char _motorShieldOption = '1';
-    int _noOfWheels;
+    uint8_t _speed;
+    char _motorShieldOption;
+    uint8_t _noOfWheels;
     bool _usesPWM = false;
     bool isOneWheel = false;
     bool isTwoWheel = false;
     bool isFourWheel = false;
 
-    void oneDCMotor();
+    void oneDCMotor(const uint8_t* leftMotorDirection);
 
-    void twoDCMotors();
+    void twoDCMotors(const uint8_t* leftMotorDirection, const uint8_t* rightMotorDirection);
 
     void fourDCMotors();
 
@@ -157,7 +173,7 @@ class DC_Motor : public MotorControl
      *
      * @param[in]  speed  The rate at which the motor(s) moves.
      */
-    void forward(int speed) override;
+    void forward(uint8_t speed) override;
 
     /**
      * @brief      Moves the robot (motor(s)) backwards.
@@ -169,7 +185,7 @@ class DC_Motor : public MotorControl
      *
      * @param[in]  speed  The rate at which the motor(s) moves.
      */
-    void reverse(int speed) override;
+    void reverse(uint8_t speed) override;
 
     /**
      * @brief      Moves the robot (motor(s)) left.
@@ -181,7 +197,7 @@ class DC_Motor : public MotorControl
      *
      * @param[in]  speed  The rate at which the motor(s) moves.
      */
-    void left(int speed) override;
+    void left(uint8_t speed) override;
 
     /**
      * @brief      Moves the robot (motor(s)) right.
@@ -193,7 +209,7 @@ class DC_Motor : public MotorControl
      *
      * @param[in]  speed  The rate at which the motor(s) moves.
      */
-    void right(int speed) override;
+    void right(uint8_t speed) override;
 
     /**
      * @brief      Stops the motor if it is moving
