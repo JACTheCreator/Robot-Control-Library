@@ -15,10 +15,9 @@
 * @param[in]  in1   The pin on the arduino that controls the positive polarity of the motor.
 * @param[in]  in2   The pin on the arduino that controls the negative polarity of the motor.
 */
-DC_Motor::DC_Motor(int in1, int in2) : _leftIn1(in1), _leftIn2(in2)
+DC_Motor::DC_Motor(uint8_t in1, uint8_t in2) : _frontLeftIn1(in1), _frontLeftIn2(in2)
 {
-  isOneWheel = true;
-  isTwoWheel = false;
+  _noOfWheels = 1;
   _usesPWM = false;
 }
 
@@ -29,10 +28,9 @@ DC_Motor::DC_Motor(int in1, int in2) : _leftIn1(in1), _leftIn2(in2)
 * @param[in]  in2   The pin on the arduino that controls the negative polarity of the motor.
 * @param[in]  pwm   The Pulse Width Modulation(PWM) pin on the arduino for the motor.
 */
-DC_Motor::DC_Motor(int in1, int in2, int pwm) : _leftIn1(in1), _leftIn2(in2), _pwmLeft(pwm)
+DC_Motor::DC_Motor(uint8_t in1, uint8_t in2, uint8_t pwm) : _frontLeftIn1(in1), _frontLeftIn2(in2), _pwmFrontLeft(pwm)
 {
-  isOneWheel = true;
-  isTwoWheel = false;
+  _noOfWheels = 1;
   _usesPWM = true;
 }
 
@@ -44,10 +42,9 @@ DC_Motor::DC_Motor(int in1, int in2, int pwm) : _leftIn1(in1), _leftIn2(in2), _p
 * @param[in]  rightIn1  The pin on the arduino that controls the positive polarity of the (right) motor.
 * @param[in]  rightIn2  The pin on the arduino that controls the negative polarity of the (right) motor.
 */
-DC_Motor::DC_Motor(int leftIn1, int leftIn2, int rightIn1, int rightIn2) : _leftIn1(leftIn1), _leftIn2(leftIn2), _rightIn1(rightIn1), _rightIn2(rightIn2)
+DC_Motor::DC_Motor(uint8_t leftIn1, uint8_t leftIn2, uint8_t rightIn1, uint8_t rightIn2) : _frontLeftIn1(leftIn1), _frontLeftIn2(leftIn2), _frontRightIn1(rightIn1), _frontRightIn2(rightIn2)
 {
-  isOneWheel = false;
-  isTwoWheel = true;
+  _noOfWheels = 2;
   _usesPWM = false;
 }
 
@@ -61,10 +58,21 @@ DC_Motor::DC_Motor(int leftIn1, int leftIn2, int rightIn1, int rightIn2) : _left
 * @param[in]  rightIn2  The pin on the arduino that controls the negative polarity of the (right) motor.
 * @param[in]  pwmRight  The Pulse Width Modulation(PWM) pin on the arduino for the (right) motor.
 */
-DC_Motor::DC_Motor(int leftIn1, int leftIn2, int pwmLeft, int rightIn1, int rightIn2, int pwmRight) : _leftIn1(leftIn1), _leftIn2(leftIn2), _pwmLeft(pwmLeft), _rightIn1(rightIn1), _rightIn2(rightIn2), _pwmRight(pwmRight)
+DC_Motor::DC_Motor(uint8_t leftIn1, uint8_t leftIn2, uint8_t pwmLeft, uint8_t rightIn1, uint8_t rightIn2, uint8_t pwmRight) : _frontLeftIn1(leftIn1), _frontLeftIn2(leftIn2), _pwmFrontLeft(pwmLeft), _frontRightIn1(rightIn1), _frontRightIn2(rightIn2), _pwmFrontRight(pwmRight)
 {
-  isOneWheel = false;
-  isTwoWheel = true;
+  _noOfWheels = 2;
+  _usesPWM = true;
+}
+
+DC_Motor::DC_Motor(uint8_t frontLeftIn1, uint8_t frontLeftIn2, uint8_t frontRightIn1, uint8_t frontRightIn2, uint8_t backLeftIn1, uint8_t backLeftIn2, uint8_t backRightIn1, uint8_t backRightIn2) : _frontLeftIn1(frontLeftIn1), _frontLeftIn2(frontLeftIn2),  _pwmFrontLeft(pwmFrontLeft), _frontRightIn1(frontRightIn1), _frontRightIn2(frontRightIn2), _pwmFrontRight(pwmFrontRight),_backLeftIn1(backLeftIn1), _backLeftIn2(backLeftIn2), _pwmBackLeft(pwmBackLeft), _backRightIn1(backRightIn1), _backRightIn2(backRightIn2), _pwmBackRight(pwmBackRight)
+{
+  _noOfWheels = 4;
+  _usesPWM = false;
+}
+
+DC_Motor::DC_Motor(uint8_t frontLeftIn1, uint8_t frontLeftIn2, uint8_t pwmFrontLeft, uint8_t frontRightIn1, uint8_t frontRightIn2, uint8_t pwmFrontRight, uint8_t backLeftIn1, uint8_t backLeftIn2, uint8_t pwmBackLeft, uint8_t backRightIn1, uint8_t backRightIn2, uint8_t pwmBackRight) : _frontLeftIn1(frontLeftIn1), _frontLeftIn2(frontLeftIn2),  _pwmFrontLeft(pwmFrontLeft), _frontRightIn1(frontRightIn1), _frontRightIn2(frontRightIn2), _pwmFrontRight(pwmFrontRight),_backLeftIn1(backLeftIn1), _backLeftIn2(backLeftIn2), _pwmBackLeft(pwmBackLeft), _backRightIn1(backRightIn1), _backRightIn2(backRightIn2), _pwmBackRight(pwmBackRight)
+{
+  _noOfWheels = 4;
   _usesPWM = true;
 }
 
@@ -73,28 +81,36 @@ DC_Motor::DC_Motor(int leftIn1, int leftIn2, int pwmLeft, int rightIn1, int righ
 */
 void DC_Motor::init(void)
 {
-  if(isOneWheel)
-  {
-    pinMode(_leftIn1, OUTPUT);
-    pinMode(_leftIn2, OUTPUT);
-    if(_usesPWM)
-    {
-      pinMode(_pwmLeft, OUTPUT);
-    }
-  }
-  else if(isTwoWheel)
-  {
-    pinMode(_leftIn1, OUTPUT);
-    pinMode(_leftIn2, OUTPUT);
+  switch(_noOfWheels)
+	{
+		case 4:
+			pinMode(_backLeftIn1, OUTPUT);
+			pinMode(_backLeftIn2, OUTPUT);.
 
-    pinMode(_rightIn1, OUTPUT);
-    pinMode(_rightIn2, OUTPUT);
-    if(_usesPWM)
-    {
-      pinMode(_pwmLeft, OUTPUT);
-      pinMode(_pwmRight, OUTPUT);
-    }
-  }
+			pinMode(_backRightIn1, OUTPUT);
+			pinMode(_backRightIn2, OUTPUT);
+			if(_usesPWM)
+			{
+				pinMode(_pwmBackLeft, OUTPUT);
+				pinMode(_pwmBackRight, OUTPUT);
+			}
+
+		case 2:
+			pinMode(_frontRightIn1, OUTPUT);
+			pinMode(_frontRightIn2, OUTPUT);
+			if(_usesPWM)
+			{
+				pinMode(_pwmFrontRight, OUTPUT);
+			}
+
+		case 1:
+			pinMode(_frontLeftIn1, OUTPUT);
+			pinMode(_frontLeftIn2, OUTPUT);
+			if(_usesPWM)
+			{
+				pinMode(_pwmFrontLeft, OUTPUT);
+			}
+	}
 }
 
 /**
@@ -102,16 +118,23 @@ void DC_Motor::init(void)
 */
 void DC_Motor::forward(void)
 {
-  //Clockwise
-  digitalWrite(_leftIn1, HIGH);
-  digitalWrite(_leftIn2, LOW);
+	switch(_noOfWheels)
+	{
+		case 4:
+			digitalWrite(_backLeftIn1, HIGH);
+			digitalWrite(_backLeftIn2, LOW);
 
-  if(isTwoWheel)
-  {
-    //Clockwise
-    digitalWrite(_rightIn1, HIGH);
-    digitalWrite(_rightIn2, LOW);
-  }
+			digitalWrite(_backRightIn1, HIGH);
+			digitalWrite(_backRightIn2, LOW);
+
+		case 2:
+			digitalWrite(_frontRightIn1, HIGH);
+			digitalWrite(_frontRightIn2, LOW);
+
+		case 1:
+			digitalWrite(_frontLeftIn1, HIGH);
+			digitalWrite(_frontLeftIn2, LOW);
+	}
 }
 
 /**
@@ -119,16 +142,23 @@ void DC_Motor::forward(void)
 */
 void DC_Motor::reverse(void)
 {
-  //Anti-clockwise
-  digitalWrite(_leftIn1, LOW);
-  digitalWrite(_leftIn2, HIGH);
+	switch(_noOfWheels)
+	{
+		case 4:
+			digitalWrite(_backLeftIn1, LOW);
+			digitalWrite(_backLeftIn2, HIGH);
 
-  if(isTwoWheel)
-  {
-    //Anti-clockwise
-    digitalWrite(_rightIn1, LOW);
-    digitalWrite(_rightIn2, HIGH);
-  }
+			digitalWrite(_backRightIn1, LOW);
+			digitalWrite(_backRightIn2, HIGH);
+
+		case 2:
+			digitalWrite(_frontRightIn1, LOW);
+			digitalWrite(_frontRightIn2, HIGH);
+
+		case 1:
+			digitalWrite(_frontLeftIn1, LOW);
+			digitalWrite(_frontLeftIn2, HIGH);
+	}
 }
 
 /**
@@ -136,16 +166,22 @@ void DC_Motor::reverse(void)
 */
 void DC_Motor::left(void)
 {
-  if(isTwoWheel)
-  {
-    //Clockwise
-    digitalWrite(_leftIn1, LOW);
-    digitalWrite(_leftIn2, HIGH);
+	switch(_noOfWheels)
+	{
+		case 4:
+			digitalWrite(_backLeftIn1, HIGH);
+			digitalWrite(_backLeftIn2, LOW);
 
-    //Anti-clockwise
-    digitalWrite(_rightIn1, HIGH);
-    digitalWrite(_rightIn2, LOW);
-  }
+			digitalWrite(_backRightIn1, LOW);
+			digitalWrite(_backRightIn2, HIGH);
+
+		case 2:
+			digitalWrite(_frontRightIn1, HIGH);
+			digitalWrite(_frontRightIn2, LOW);
+
+			digitalWrite(_frontLeftIn1, LOW);
+			digitalWrite(_frontLeftIn2, HIGH);
+	}
 }
 
 /**
@@ -153,16 +189,22 @@ void DC_Motor::left(void)
 */
 void DC_Motor::right(void)
 {
-  if(isTwoWheel)
-  {
-    //Anti-clockwise
-    digitalWrite(_leftIn1, LOW);
-    digitalWrite(_leftIn2, HIGH);
+	switch(_noOfWheels)
+	{
+		case 4:
+			digitalWrite(_backLeftIn1, LOW);
+			digitalWrite(_backLeftIn2, HIGH);
 
-    //Clockwise
-    digitalWrite(_rightIn1, HIGH);
-    digitalWrite(_rightIn2, LOW);
-  }
+			digitalWrite(_backRightIn1, HIGH);
+			digitalWrite(_backRightIn2, LOW);
+
+		case 2:
+			digitalWrite(_frontRightIn1, LOW);
+			digitalWrite(_frontRightIn2, HIGH);
+
+			digitalWrite(_frontLeftIn1, HIGH);
+			digitalWrite(_frontLeftIn2, LOW);
+	}
 }
 
 /**
@@ -170,19 +212,30 @@ void DC_Motor::right(void)
 *
 * @param[in]  speed  The rate at which the motor(s) moves.
 */
-void DC_Motor::forward(int speed)
+void DC_Motor::forward(uint8_t speed)
 {
   _speed = speed;
-  //Clockwise
-  digitalWrite(_leftIn1, HIGH);
-  digitalWrite(_leftIn2, LOW);
+  switch(_noOfWheels)
+	{
+		case 4:
+			digitalWrite(_backLeftIn1, HIGH);
+			digitalWrite(_backLeftIn2, LOW);
+			analogWrite(_pwmBackLeft, _speed);
 
-  if(isTwoWheel)
-  {
-    //Clockwise
-    digitalWrite(_rightIn1, HIGH);
-    digitalWrite(_rightIn2, LOW);
-  }
+			digitalWrite(_backRightIn1, HIGH);
+			digitalWrite(_backRightIn2, LOW);
+			analogWrite(_pwmBackRight, _speed);
+
+		case 2:
+			digitalWrite(_frontRightIn1, HIGH);
+			digitalWrite(_frontRightIn2, LOW);
+			analogWrite(_pwmFrontRight, _speed);
+
+		case 1:
+			digitalWrite(_frontLeftIn1, HIGH);
+			digitalWrite(_frontLeftIn2, LOW);
+			analogWrite(_pwmFrontLeft, _speed);
+	}
 }
 
 /**
@@ -190,18 +243,30 @@ void DC_Motor::forward(int speed)
 *
 * @param[in]  speed  The rate at which the motor(s) moves.
 */
-void DC_Motor::reverse(int speed)
+void DC_Motor::reverse(uint8_t speed)
 {
   _speed = speed;
-  //Anti-clockwise
-  digitalWrite(_leftIn1, LOW);
-  digitalWrite(_leftIn2, HIGH);
-  analogWrite(_pwmLeft, _speed);
+  switch(_noOfWheels)
+	{
+		case 4:
+			digitalWrite(_backLeftIn1, LOW);
+			digitalWrite(_backLeftIn2, HIGH);
+			analogWrite(_pwmBackLeft, _speed);
 
-  //Anti-clockwise
-  digitalWrite(_rightIn1, LOW);
-  digitalWrite(_rightIn2, HIGH);
-  analogWrite(_pwmRight,_speed);
+			digitalWrite(_backRightIn1, LOW);
+			digitalWrite(_backRightIn2, HIGH);
+			analogWrite(_pwmBackRight, _speed);
+
+		case 2:
+			digitalWrite(_frontRightIn1, LOW);
+			digitalWrite(_frontRightIn2, HIGH);
+			analogWrite(_pwmFrontRight, _speed);
+
+		case 1:
+			digitalWrite(_frontLeftIn1, LOW);
+			digitalWrite(_frontLeftIn2, HIGH);
+			analogWrite(_pwmFrontLeft, _speed);
+	}
 }
 
 /**
@@ -209,18 +274,29 @@ void DC_Motor::reverse(int speed)
 *
 * @param[in]  speed  The rate at which the motor(s) moves.
 */
-void DC_Motor::left(int speed)
+void DC_Motor::left(uint8_t speed)
 {
   _speed = speed;
-  //Clockwise
-  digitalWrite(_leftIn1, LOW);
-  digitalWrite(_leftIn2, HIGH);
-  analogWrite(_pwmLeft, _speed);
+  switch(_noOfWheels)
+	{
+		case 4:
+			digitalWrite(_backLeftIn1, HIGH);
+			digitalWrite(_backLeftIn2, LOW);
+			analogWrite(_pwmBackLeft, _speed);
 
-  //Anti-clockwise
-  digitalWrite(_rightIn1, HIGH);
-  digitalWrite(_rightIn2, LOW);
-  analogWrite(_pwmRight, _speed);
+			digitalWrite(_backRightIn1, LOW);
+			digitalWrite(_backRightIn2, HIGH);
+			analogWrite(_pwmBackRight, _speed);
+
+		case 2:
+			digitalWrite(_frontRightIn1, HIGH);
+			digitalWrite(_frontRightIn2, LOW);
+			analogWrite(_pwmFrontRight, _speed);
+
+			digitalWrite(_frontLeftIn1, LOW);
+			digitalWrite(_frontLeftIn2, HIGH);
+			analogWrite(_pwmFrontLeft, _speed);
+	}
 }
 
 /**
@@ -228,18 +304,29 @@ void DC_Motor::left(int speed)
 *
 * @param[in]  speed  The rate at which the motor(s) moves.
 */
-void DC_Motor::right(int speed)
+void DC_Motor::right(uint8_t speed)
 {
   _speed = speed;
-  //Anti-clockwise
-  digitalWrite(_leftIn1, LOW);
-  digitalWrite(_leftIn2, HIGH);
-  analogWrite(_pwmLeft, _speed);
+  switch(_noOfWheels)
+	{
+		case 4:
+			digitalWrite(_backLeftIn1, LOW);
+			digitalWrite(_backLeftIn2, HIGH);
+			analogWrite(_pwmBackLeft, _speed);
 
-  //Clockwise
-  digitalWrite(_rightIn1, HIGH);
-  digitalWrite(_rightIn2, LOW);
-  analogWrite(_pwmRight, _speed);
+			digitalWrite(_backRightIn1, HIGH);
+			digitalWrite(_backRightIn2, LOW);
+			analogWrite(_pwmBackRight, _speed);
+
+		case 2:
+			digitalWrite(_frontRightIn1, LOW);
+			digitalWrite(_frontRightIn2, HIGH);
+			analogWrite(_pwmFrontRight, _speed);
+
+			digitalWrite(_frontLeftIn1, HIGH);
+			digitalWrite(_frontLeftIn2, LOW);
+			analogWrite(_pwmFrontLeft, _speed); 
+	}
 }
 
 /**
@@ -249,15 +336,33 @@ void DC_Motor::stop()
 {
   _speed = 0;
 
-  //Anti-clockwise
-  digitalWrite(_leftIn1, HIGH);
-  digitalWrite(_leftIn2, HIGH);
-  analogWrite(_pwmLeft, _speed);
+  switch(_noOfWheels)
+	{
+		case 4:
+			digitalWrite(_backLeftIn1, LOW);
+			digitalWrite(_backLeftIn2, LOW);
+			
+			digitalWrite(_backRightIn1, LOW);
+			digitalWrite(_backRightIn2, LOW);
+			if(_usesPWM)
+			{
+				analogWrite(_pwmBackLeft, _speed);
+				analogWrite(_pwmBackRight, _speed);
+			}
 
-  //Clockwise
-  digitalWrite(_rightIn1, HIGH);
-  digitalWrite(_rightIn2, HIGH);
-  analogWrite(_pwmRight, _speed);
+		case 2:
+			digitalWrite(_frontRightIn1, LOW);
+			digitalWrite(_frontRightIn2, LOW);
+
+			digitalWrite(_frontLeftIn1, LOW);
+			digitalWrite(_frontLeftIn2, LOW);
+
+			if(_usesPWM)
+			{
+				analogWrite(_pwmFrontRight, _speed);
+				analogWrite(_pwmFrontLeft, _speed); 
+			}
+	}
 }
 
 /****************************
@@ -268,7 +373,7 @@ void DC_Motor::stop()
 *
 * @param[in]  direction  The course along which the robot (motor(s)) moves.
 */
-void DC_Motor::drive(int direction)
+void DC_Motor::drive(uint8_t direction)
 {
   switch(direction)
   {
@@ -300,7 +405,7 @@ void DC_Motor::drive(int direction)
 * @param[in]  direction  The course along which the robot (motor(s)) moves.
 * @param[in]  speed      The rate at which the motor(s) moves.
 */
-void DC_Motor::drive(int direction, int speed)
+void DC_Motor::drive(uint8_t direction, uint8_t speed)
 {
   switch(direction)
   {
