@@ -64,7 +64,7 @@ DC_Motor::DC_Motor(uint8_t leftIn1, uint8_t leftIn2, uint8_t pwmLeft, uint8_t ri
   _usesPWM = true;
 }
 
-DC_Motor::DC_Motor(uint8_t frontLeftIn1, uint8_t frontLeftIn2, uint8_t frontRightIn1, uint8_t frontRightIn2, uint8_t backLeftIn1, uint8_t backLeftIn2, uint8_t backRightIn1, uint8_t backRightIn2) : _frontLeftIn1(frontLeftIn1), _frontLeftIn2(frontLeftIn2),  _pwmFrontLeft(pwmFrontLeft), _frontRightIn1(frontRightIn1), _frontRightIn2(frontRightIn2), _pwmFrontRight(pwmFrontRight),_backLeftIn1(backLeftIn1), _backLeftIn2(backLeftIn2), _pwmBackLeft(pwmBackLeft), _backRightIn1(backRightIn1), _backRightIn2(backRightIn2), _pwmBackRight(pwmBackRight)
+DC_Motor::DC_Motor(uint8_t frontLeftIn1, uint8_t frontLeftIn2, uint8_t frontRightIn1, uint8_t frontRightIn2, uint8_t backLeftIn1, uint8_t backLeftIn2, uint8_t backRightIn1, uint8_t backRightIn2) : _frontLeftIn1(frontLeftIn1), _frontLeftIn2(frontLeftIn2), _frontRightIn1(frontRightIn1), _frontRightIn2(frontRightIn2), _backLeftIn1(backLeftIn1), _backLeftIn2(backLeftIn2), _backRightIn1(backRightIn1), _backRightIn2(backRightIn2)
 {
   _noOfWheels = 4;
   _usesPWM = false;
@@ -85,7 +85,7 @@ void DC_Motor::init(void)
 	{
 		case 4:
 			pinMode(_backLeftIn1, OUTPUT);
-			pinMode(_backLeftIn2, OUTPUT);.
+			pinMode(_backLeftIn2, OUTPUT);
 
 			pinMode(_backRightIn1, OUTPUT);
 			pinMode(_backRightIn2, OUTPUT);
