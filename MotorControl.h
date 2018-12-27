@@ -14,21 +14,12 @@
   #include "pins_arduino.h"
   #include "WConstants.h"
 #endif
-#include "AFMotor.h"
 
 #define FORWARD 1
 #define REVERSE 2
 #define LEFT 3
 #define RIGHT 4
 #define STOP 5
-
-#define NONE '1'
-#define ADAFRUIT_V1 '2'
-#define ADAFRUIT_V2 '3'
-
-extern const uint8_t FORWARD_ACTION[3];
-extern const uint8_t BACKWARD_ACTION[3];
-extern const uint8_t STOP_ACTION[3];
 
 /**
  * @brief      Defines the direction the Robot (motor(s)) will move in.
@@ -55,10 +46,6 @@ public:
 class DC_Motor : public MotorControl
 {
   public:
-
-
-    DC_Motor(uint8_t noOfWheels, char* motorShieldOption);
-
     /**
      * @brief      Initialize the pins for a DC motor.
      *
@@ -98,8 +85,36 @@ class DC_Motor : public MotorControl
      */
     DC_Motor(uint8_t leftIn1, uint8_t leftIn2, uint8_t pwmLeft, uint8_t rightIn1, uint8_t rightIn2, uint8_t pwmRight);
 
+    /**
+     * @brief      Initialize the pins for four DC motor.
+     *
+     * @param[in]  frontLeftIn1   The pin on the arduino that controls the positive polarity of the (front left) motor.
+     * @param[in]  frontLeftIn2   The pin on the arduino that controls the negative polarity of the (front left) motor.
+     * @param[in]  frontRightIn1  The pin on the arduino that controls the positive polarity of the (front right) motor.
+     * @param[in]  frontRightIn2  The pin on the arduino that controls the negative polarity of the (front right) motor.
+     * @param[in]  backLeftIn1  The pin on the arduino that controls the positive polarity of the (back left) motor.
+     * @param[in]  backLeftIn2  The pin on the arduino that controls the negative polarity of the (back left) motor.
+     * @param[in]  backRightIn1  The pin on the arduino that controls the positive polarity of the (back right) motor.
+     * @param[in]  backRightIn2  The pin on the arduino that controls the negative polarity of the (back right) motor.
+     */
     DC_Motor(uint8_t frontLeftIn1, uint8_t frontLeftIn2, uint8_t frontRightIn1, uint8_t frontRightIn2, uint8_t backLeftIn1, uint8_t backLeftIn2, uint8_t backRightIn1, uint8_t backRightIn2);
 
+    /**
+     * @brief      Initialize the pins for four DC motor with speed control
+     *
+     * @param[in]  frontLeftIn1   The pin on the arduino that controls the positive polarity of the (front left) motor.
+     * @param[in]  frontLeftIn2   The pin on the arduino that controls the negative polarity of the (front left) motor.
+     * @param[in]  pwmFrontLeft   The Pulse Width Modulation(PWM) pin on the arduino for the (front left) motor.
+     * @param[in]  frontRightIn1  The pin on the arduino that controls the positive polarity of the (front right) motor.
+     * @param[in]  frontRightIn2  The pin on the arduino that controls the negative polarity of the (front right) motor.
+     * @param[in]  pwmFrontRight  The Pulse Width Modulation(PWM) pin on the arduino for the (front right) motor.
+     * @param[in]  backLeftIn1  The pin on the arduino that controls the positive polarity of the (back left) motor.
+     * @param[in]  backLeftIn2  The pin on the arduino that controls the negative polarity of the (back left) motor.
+     * @param[in]  pwmBackLeft The Pulse Width Modulation(PWM) pin on the arduino for the (back left) motor.
+     * @param[in]  backRightIn1  The pin on the arduino that controls the positive polarity of the (back right) motor.
+     * @param[in]  backRightIn2  The pin on the arduino that controls the negative polarity of the (back right) motor.
+     * @param[in]  pwmBackRight  The Pulse Width Modulation(PWM) pin on the arduino for the (back right) motor.
+     */
     DC_Motor(uint8_t frontLeftIn1, uint8_t frontLeftIn2, uint8_t pwmFrontLeft, uint8_t frontRightIn1, uint8_t frontRightIn2, uint8_t pwmFrontRight, uint8_t backLeftIn1, uint8_t backLeftIn2, uint8_t pwmBackLeft, uint8_t backRightIn1, uint8_t backRightIn2, uint8_t pwmBackRight);
 
     /**
@@ -128,7 +143,6 @@ class DC_Motor : public MotorControl
     void drive(uint8_t direction, uint8_t speed);
 
   private:
-    //Using H-Bridge
     uint8_t _frontLeftIn1;
     uint8_t _frontLeftIn2;
     uint8_t _frontRightIn1;
@@ -142,26 +156,10 @@ class DC_Motor : public MotorControl
     uint8_t _backRightIn2;
     uint8_t _pwmBackLeft;
     uint8_t _pwmBackRight;
-
-    //Using Motor Shield
-    AF_DCMotor frontLeftMotor = AF_DCMotor(0);
-    AF_DCMotor frontRightMotor = AF_DCMotor(0);
-    AF_DCMotor backLeftMotor = AF_DCMotor(0);
-    AF_DCMotor backRightMotor = AF_DCMotor(0);
-
     uint8_t _speed;
-    char _motorShieldOption;
+
     uint8_t _noOfWheels;
     bool _usesPWM = false;
-    bool isOneWheel = false;
-    bool isTwoWheel = false;
-    bool isFourWheel = false;
-
-    void oneDCMotor(const uint8_t* leftMotorDirection);
-
-    void twoDCMotors(const uint8_t* leftMotorDirection, const uint8_t* rightMotorDirection);
-
-    void fourDCMotors();
 
     /**
      * @brief      Moves the robot (motor(s)) forward.
@@ -216,4 +214,5 @@ class DC_Motor : public MotorControl
      */
     void stop(void) override;
 };
+
 #endif //__MOTORCONTROL_H__
